@@ -1,5 +1,5 @@
 # NORVI-GSM-AE04-V-G
-ESP32-based controller with 0-10V analog inputs, transistor outputs, and GSM communication including micro SD and RTC. 
+ ESP32-based controller with 0-10V analog inputs, transistor outputs, and GSM communication including micro SD and RTC. 
 
 USB Programmable Controller with multiple connectivity channels. 
 Ideal for an IoT gateway or data transmission applications. 
