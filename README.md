@@ -9,7 +9,7 @@ Models are available with different variations on Input and Output options.
 Moreover, NORVI GSM Industrial ESP32 is expandable with Expansion modules. 
 
 ESP32-WROOM32 Module
-LTE Connection
+GSM Connection
 Built-in 0.96 OLED Display
 Built-in Button on the front panel
 Digital Inputs
