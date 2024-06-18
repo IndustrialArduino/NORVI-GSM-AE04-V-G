@@ -1,20 +1,13 @@
-
 /*
- * 
- * 
  * RTC Check
  * micro SD Card Check CS : 15
  * RS485
  * SIM800C
  * All Output Turn ON Series
  * All input status serial print
- * 
-  Turns ON All Outputs in series
-  Serial prints all the input status
-  SIM800C External Antenna Test
-  
- *   
- * 
+ * Turns ON All Outputs in series
+ * Serial prints all the input status
+ * SIM800C External Antenna Test 
  */
 
 #include <SPI.h>
@@ -52,42 +45,27 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-
-
 Adafruit_ADS1115 ads1;
 Adafruit_ADS1115 ads2;
-
 
 int analog_value = 0;
 
 RTC_DS3231 rtc; 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-
   
 int readSwitch(){
   analog_value = analogRead(ANALOG_PIN_0);
-
- 
-  return analog_value                                                                                                ; //Read analog
+  return analog_value; //Read analog
 }
 
-
-
 unsigned long int timer1 = 0;
-
 // ================================================ SETUP ================================================
 void setup() {
- 
   Serial.begin(115200);
-
   Serial.println("Hello");
   Serial1.begin(9600, SERIAL_8N1, RS485_RX, RS485_TX); 
   Serial2.begin(9600, SERIAL_8N1, GSM_TX, GSM_RX); 
-
-  //pinMode(GSM_RESET, OUTPUT);
-  //digitalWrite(GSM_RESET, HIGH);   // RS-485 
-
+  
   pinMode(RS485_FC, OUTPUT);
   digitalWrite(RS485_FC, HIGH);   // RS-485 
   
@@ -100,11 +78,9 @@ void setup() {
   pinMode(INPUT4, INPUT);
   pinMode(INPUT5, INPUT);
   pinMode(INPUT6, INPUT);
-
   
   pinMode(SD_CS, OUTPUT);
   digitalWrite(SD_CS,HIGH);
-
   
   Wire.begin(16,17);
 
@@ -113,29 +89,20 @@ void setup() {
     for(;;); // Don't proceed, loop forever
   }
   display.display();
-
   if (!ads1.begin(0x48)) {
     Serial.println("Failed to initialize ADS 1 .");
     while (1);
   }
-
   if (!ads2.begin(0x49)) {
     Serial.println("Failed to initialize ADS 2 .");
     while (1);
   }
-
-
-
-    RTC_Check();
+  RTC_Check();
   delay(1000);
   SD_CHECK();
   delay(1000);
-  
-  Serial.println("Testing Modem");
-  
-  
-
- timer1 = millis();
+  Serial.println("Testing Modem"); 
+  timer1 = millis();
   Serial2.println("AT");
   while(millis()<timer1+10000){
     while (Serial2.available()) {
@@ -160,30 +127,13 @@ void setup() {
     Serial.write(inByte);
     }
   }
-
-   Serial.println("Testing Modem Done");
-
-  
+  Serial.println("Testing Modem Done"); 
   adcAttachPin(36);
-
-
   digitalWrite(RS485_FC, HIGH);   // RS-485 
-
-
-  //
-  
 }
-
-
-
-
-
-
 void loop() {
-
   int16_t adc0, adc1, adc2, adc3;
   float volts0, volts1, volts2, volts3;
-  
   // read from port 0, send to port 1:
   while (Serial.available()) {
     int inByte = Serial.read();
@@ -194,12 +144,13 @@ void loop() {
     int inByte = Serial2.read();
     Serial.write(inByte);
   }
-
- 
- 
-  Serial.print(digitalRead(INPUT1));Serial.print(digitalRead(INPUT2));Serial.print(digitalRead(INPUT3));Serial.print(digitalRead(INPUT4));Serial.print(digitalRead(INPUT5));Serial.print(digitalRead(INPUT6));
+  Serial.print(digitalRead(INPUT1));
+  Serial.print(digitalRead(INPUT2));
+  Serial.print(digitalRead(INPUT3));
+  Serial.print(digitalRead(INPUT4));
+  Serial.print(digitalRead(INPUT5));
+  Serial.print(digitalRead(INPUT6));
   Serial.println(""); 
-
   
   adc0 = ads1.readADC_SingleEnded(0);
   adc1 = ads1.readADC_SingleEnded(1);
@@ -212,7 +163,6 @@ void loop() {
   Serial.print("AIN3: "); Serial.print(adc2); Serial.println("  ");
   Serial.print("AIN4: "); Serial.print(adc3); Serial.println("  ");
 
-
   adc0 = ads2.readADC_SingleEnded(0);
   adc1 = ads2.readADC_SingleEnded(1);
   adc2 = ads2.readADC_SingleEnded(2);
@@ -223,12 +173,10 @@ void loop() {
   Serial.print("AIN7: "); Serial.print(adc2); Serial.println("  ");
   Serial.print("AIN8: "); Serial.print(adc3); Serial.println("  ");
 
-
-
   Serial.println(""); 
-  Serial.print("Push button  ");Serial.println(readSwitch());
+  Serial.print("Push button  ");
+  Serial.println(readSwitch());
   Serial.println(""); 
-
   
   digitalWrite(OUTPUT1, HIGH);
   digitalWrite(OUTPUT2, LOW);
@@ -240,17 +188,11 @@ void loop() {
   digitalWrite(OUTPUT2, LOW);
    
   Serial1.println("Hello RS-485");
-   
- //Serial2.println("AT");
- delay(1000);
- 
- 
+  delay(1000);
 }
 
-
 void displayTime(void) {
-  DateTime now = rtc.now();
-     
+  DateTime now = rtc.now(); 
   Serial.print(now.year(), DEC);
   Serial.print('/');
   Serial.print(now.month(), DEC);
@@ -266,7 +208,6 @@ void displayTime(void) {
   Serial.print(now.second(), DEC);
   Serial.println();
   delay(1000);
-
 }
 
 void RTC_Check(){
@@ -275,12 +216,9 @@ void RTC_Check(){
   }
  else{
  if (rtc.lostPower()) {
-  
     Serial.println("RTC lost power, lets set the time!");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    
-  }
-
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  
+ }
    
   int a=1;
   while(a<6)
@@ -291,16 +229,11 @@ void RTC_Check(){
  }
 }
 
-
-
 void SD_CHECK(){
   uint8_t cardType = SD.cardType();
-  
-    if(SD.begin(15))
- {
-  Serial.println("Card Mount: success");
-  Serial.print("Card Type: ");
-
+  if(SD.begin(15)) {
+    Serial.println("Card Mount: success");
+    Serial.print("Card Type: ");
     if(cardType == CARD_MMC){
         Serial.println("MMC");
     } else if(cardType == CARD_SD){
@@ -310,15 +243,11 @@ void SD_CHECK(){
     } else {
         Serial.println("Unknown");
     }
-
-  int cardSize = SD.cardSize() / (1024 * 1024);
-  Serial.printf("Card Size: %lluMB\n", cardSize);
-
+    int cardSize = SD.cardSize() / (1024 * 1024);
+    Serial.printf("Card Size: %lluMB\n", cardSize);
   }
-
   if(!SD.begin(15))
   {
-  Serial.println("NO SD card");            
+    Serial.println("NO SD card");            
   }
-
 }
