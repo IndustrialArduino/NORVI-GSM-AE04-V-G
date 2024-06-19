@@ -1,6 +1,6 @@
 /*
  * RTC Check
- * micro SD Card Check CS : 15
+ * micro SD Card Check 
  * RS485
  * SIM800C
  * All Output Turn ON Series
